@@ -1,9 +1,7 @@
-module linkShrink
+module my
 
-go 1.20
+go 1.19
 
-require (
-	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
-	github.com/speps/go-hashids/v2 v2.0.1 // indirect
-	github.com/zeebo/xxh3 v1.0.2 // indirect
-)
+require github.com/zeebo/xxh3 v1.0.2
+
+require github.com/klauspost/cpuid/v2 v2.0.9 // indirect
