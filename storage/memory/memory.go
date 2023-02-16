@@ -1,35 +1,37 @@
 package memory
 
+import (
+	"cc-links/storage"
+	"context"
+	"errors"
+)
+
 type Storage struct {
-	basePath string
+	Db map[string]string
 }
 
-func New(basePath string) Storage {
-	return Storage{basePath: basePath}
+func New() *Storage {
+	return &Storage{Db: make(map[string]string)}
 }
 
-// Create(ctx context.Context, link *Link) (*Link, error)
-//func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
-//	defer func() { err = e.WrapIfErr("can't pick random page", err) }()
-//
-//	path := filepath.Join(s.basePath, userName)
-//
-//	// 1. check user folder
-//	// 2. create folder
-//
-//	files, err := os.ReadDir(path)
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	if len(files) == 0 {
-//		return nil, storage.ErrNoSavedPages
-//	}
-//
-//	rand.Seed(time.Now().UnixNano())
-//	n := rand.Intn(len(files))
-//
-//	file := files[n]
-//
-//	return s.decodePage(filepath.Join(path, file.Name()))
-//}
+func (ms *Storage) Create(_ context.Context, link *storage.Link) error {
+
+	if _, ok := ms.Db[link.ShortURL]; ok {
+		return errors.New("link already exists")
+	}
+
+	link.Hash()
+	ms.Db[link.ShortURL] = link.URL
+
+	return nil
+}
+
+func (ms *Storage) Get(_ context.Context, link *storage.Link) error {
+
+	if url, ok := ms.Db[link.ShortURL]; ok {
+		link.URL = url
+		return nil
+	}
+
+	return errors.New("link not found")
+}

@@ -1,14 +1,30 @@
 package main
 
 import (
+	"cc-links/storage"
+	"cc-links/storage/memory"
+	"context"
 	"fmt"
-	"my/storage"
 )
 
 func main() {
-	link := storage.Link{URL: []byte("a.io")}
-	fmt.Println(string(link.ShortURL))
+	s := memory.New()
+	//s, err := postgres.New()
+	//s.Db["key"] = "value"
+	//fmt.Println(s)
 
+	link := storage.Link{
+		URL: "https://example.com",
+	}
 	link.Hash()
-	fmt.Println(string(link.ShortURL))
+	//fmt.Println(link)
+	ctx := context.Background()
+
+	if err := s.Create(ctx, &link); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(s)
+	//var st Storage = &MemoryStorage{}
+	//fmt.Println(st)
 }

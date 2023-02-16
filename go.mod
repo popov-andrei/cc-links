@@ -1,4 +1,4 @@
-module my
+module cc-links
 
 go 1.19
 
