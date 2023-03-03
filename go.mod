@@ -1,4 +1,4 @@
-module cc-links
+module myapp
 
 go 1.19
 
